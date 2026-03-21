@@ -1,8 +1,8 @@
 # Single-cell RNA-seq Analysis Pipeline
 
-This repository contains a Python pipeline for single-cell RNA-seq analysis using the public 10x Genomics PBMC 3k dataset.
+This repository contains an end-to-end Python pipeline for single-cell RNA-seq analysis on a real public dataset.
 
-The workflow starts from the downloaded 10x count matrix, performs standard preprocessing and clustering, identifies cluster-level marker genes, assigns broad immune cell type labels heuristically, and writes figures and summary tables for downstream interpretation.
+The workflow uses the 10x Genomics PBMC 3k dataset, starting from the raw 10x count matrix and proceeding through quality control, filtering, normalization, dimensionality reduction, clustering, marker gene analysis, and broad cell type annotation. The pipeline generates figures, summary tables, and a short report automatically.
 
 ## Dataset
 
@@ -10,30 +10,32 @@ The analysis uses the public PBMC 3k dataset from 10x Genomics:
 
 - [PBMC 3k filtered gene-barcode matrices](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz)
 
-This was chosen because it is a real and widely used single-cell dataset that is small enough to run locally while still capturing the core steps of a practical scRNA-seq workflow.
+This dataset is widely used as a reference example for single-cell RNA-seq workflows and is well suited for demonstrating core preprocessing, clustering, and interpretation steps in a reproducible local analysis pipeline.
 
 ## Workflow
 
 The pipeline performs the following steps:
 
-1. download and extract the 10x matrix files
-2. calculate QC metrics
-3. filter low-quality cells and low-detection genes
-4. remove cells with elevated mitochondrial content
-5. normalize counts and log-transform expression
-6. select highly variable genes
-7. run PCA, construct a nearest-neighbor graph, and generate a UMAP embedding
-8. cluster cells with Leiden clustering
-9. identify marker genes for each cluster
-10. assign broad immune cell type labels based on canonical marker panels
+1. downloads and extracts the 10x matrix files
+2. calculates standard cell-level QC metrics
+3. filters low-quality cells and low-detection genes
+4. removes cells with elevated mitochondrial transcript content
+5. normalizes counts and log-transforms expression
+6. selects highly variable genes
+7. runs PCA and constructs a nearest-neighbor graph
+8. generates a UMAP embedding
+9. performs Leiden clustering
+10. identifies cluster-level marker genes
+11. assigns broad immune cell type labels using canonical marker panels
 
 ## Results
 
-In the current starter run, the pipeline produced:
+In the current run, the pipeline produced:
 
 - 2,700 cells before QC
 - 2,698 cells after QC
-- 13,714 genes retained after filtering
+- 32,738 genes before filtering
+- 13,714 genes after filtering
 - 8 Leiden clusters
 
 The resulting clusters were consistent with expected PBMC populations, including:
@@ -45,13 +47,15 @@ The resulting clusters were consistent with expected PBMC populations, including
 - NK cells
 - platelets
 
-Representative marker genes in the output included:
+Representative marker genes recovered by the pipeline included:
 
-- `CD3D` for T-cell enriched clusters
-- `S100A8`, `S100A9`, and `LYZ` for monocyte-enriched clusters
-- `CD79A`, `CD74`, and `MS4A1` for B-cell enriched clusters
-- `NKG7`, `PRF1`, and `GNLY` for NK-cell enriched clusters
-- `PPBP` and `PF4` for platelets
+- `CD3D` in T-cell enriched clusters
+- `S100A8`, `S100A9`, and `LYZ` in monocyte-enriched clusters
+- `CD79A`, `CD74`, and `MS4A1` in B-cell enriched clusters
+- `NKG7`, `PRF1`, and `GNLY` in NK-cell enriched clusters
+- `PPBP` and `PF4` in platelets
+
+These outputs support the biological plausibility of the clustering and annotation steps.
 
 ## Output Files
 
@@ -65,9 +69,9 @@ After a successful run, the pipeline writes:
 - `output/figures/umap_cell_types.png`
 - `output/figures/marker_heatmap.png`
 
-The full per-cell metadata and `.h5ad` object are generated locally but are typically not committed to Git because they are larger intermediate outputs.
+The full per-cell metadata table and `.h5ad` object are also generated locally for downstream analysis, but are typically not committed to Git because they are larger intermediate files.
 
-## Project Structure
+## Repository Structure
 
 ```text
 .
@@ -92,7 +96,7 @@ python3 run_pipeline.py
 
 ## Implementation Notes
 
-This project is intended to show practical familiarity with standard single-cell RNA-seq analysis steps in Python rather than to introduce a novel method. The annotation step is heuristic and based on canonical immune markers, so the assigned labels should be interpreted as broad cell-type calls rather than final expert annotations.
+This project is intended to demonstrate practical familiarity with standard single-cell RNA-seq analysis steps in Python. The cluster labels are heuristic and based on canonical immune markers, so they should be interpreted as broad cell type assignments rather than definitive annotations.
 
 ## Testing
 
