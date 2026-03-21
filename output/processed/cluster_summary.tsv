@@ -1,0 +1,9 @@
+leiden	cluster_cell_type	n_cells
+0	T_cells	1145
+1	CD14_monocytes	454
+2	B_cells	359
+3	NK_cells	357
+4	FCGR3A_monocytes	196
+5	NK_cells	138
+6	B_cells	36
+7	Platelets	13

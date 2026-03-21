@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.DS_Store
+.idea/
+.mplconfig/
+.venv/
+venv/
+output/data/
+output/.mplconfig/
+output/processed/cell_metadata.tsv
+output/processed/processed_adata.h5ad
+*.pyc
