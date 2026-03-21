@@ -103,3 +103,7 @@ This project is intended to demonstrate practical familiarity with standard sing
 ```bash
 python3 -m unittest discover -s tests -v
 ```
+
+## License
+
+MIT License. See `LICENSE`.
