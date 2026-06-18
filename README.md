@@ -4,6 +4,20 @@ This repository contains an end-to-end Python pipeline for single-cell RNA-seq a
 
 The workflow uses the 10x Genomics PBMC 3k dataset, starting from the raw 10x count matrix and proceeding through quality control, filtering, normalization, dimensionality reduction, clustering, marker gene analysis, and broad cell type annotation. The pipeline generates figures, summary tables, and a short report automatically.
 
+## What This Pipeline Does & Why It Matters
+
+Single-cell RNA-seq generates expression profiles for thousands of individual cells simultaneously — but raw data alone tells you nothing. The biological signal is buried under technical noise, batch effects, and the sheer scale of the data.
+
+This pipeline takes a raw 10x Genomics count matrix and produces something interpretable: distinct cell populations, their marker genes, and annotated cell type identities — automatically, reproducibly, and with full QC documentation at every step.
+
+**Why this matters in practice:**
+- Drug discovery teams need to know *which cell types* are present in a tissue and *how their transcriptional state changes* under treatment
+- A pipeline that goes from raw counts to annotated UMAP in a single run removes the manual bottleneck that slows that work down
+- Every output — figures, tables, reports — is versioned and reproducible, so results can be trusted and shared
+
+Built on the standard 10x PBMC 3k benchmark dataset so results are fully verifiable against the field.
+
+
 ## Pipeline Architecture
 
 ```
