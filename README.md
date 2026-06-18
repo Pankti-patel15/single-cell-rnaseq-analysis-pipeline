@@ -28,34 +28,27 @@ The pipeline performs the following steps:
 10. identifies cluster-level marker genes
 11. assigns broad immune cell type labels using canonical marker panels
 
-## Results
+## Results at a Glance
 
-In the current run, the pipeline produced:
+**UMAP — Cell Type Annotation**
+> 2,698 cells across 6 immune populations identified using canonical marker panels
 
-- 2,700 cells before QC
-- 2,698 cells after QC
-- 32,738 genes before filtering
-- 13,714 genes after filtering
-- 8 Leiden clusters
+![UMAP Cell Types](output/figures/umap_cell_types.png)
 
-The resulting clusters were consistent with expected PBMC populations, including:
+**UMAP — Leiden Clusters**
+> 8 unsupervised clusters resolved by graph-based Leiden algorithm
 
-- T cells
-- CD14 monocytes
-- FCGR3A monocytes
-- B cells
-- NK cells
-- platelets
+![UMAP Clusters](output/figures/umap_clusters.png)
 
-Representative marker genes recovered by the pipeline included:
+**Marker Gene Heatmap**
+> Top differentially expressed genes per cell type — confirms biological plausibility of annotations
 
-- `CD3D` in T-cell enriched clusters
-- `S100A8`, `S100A9`, and `LYZ` in monocyte-enriched clusters
-- `CD79A`, `CD74`, and `MS4A1` in B-cell enriched clusters
-- `NKG7`, `PRF1`, and `GNLY` in NK-cell enriched clusters
-- `PPBP` and `PF4` in platelets
+![Marker Heatmap](output/figures/marker_heatmap.png)
 
-These outputs support the biological plausibility of the clustering and annotation steps.
+**QC Distributions**
+> Genes per cell, UMI counts, and mitochondrial percentage before filtering
+
+![QC Histograms](output/figures/qc_histograms.png)
 
 ## Output Files
 
