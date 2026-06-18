@@ -6,65 +6,47 @@ The workflow uses the 10x Genomics PBMC 3k dataset, starting from the raw 10x co
 
 ## Pipeline Architecture
 
-```svg
-<svg width="100%" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg">
-  <!-- Input -->
-  <rect x="220" y="20" width="240" height="52" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-  <text x="340" y="42" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#2c2c2a">Raw 10x matrix</text>
-  <text x="340" y="60" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#5f5e5a">Filtered gene-barcode matrix</text>
-  <line x1="340" y1="72" x2="340" y2="96" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- QC -->
-  <rect x="220" y="96" width="240" height="52" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5"/>
-  <text x="340" y="118" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#0c447c">Quality control</text>
-  <text x="340" y="136" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#185fa5">Filter cells · remove mito outliers</text>
-  <line x1="460" y1="122" x2="506" y2="122" stroke="#b4b2a9" stroke-width="0.5" stroke-dasharray="3 3"/>
-  <rect x="506" y="108" width="134" height="28" rx="6" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
-  <text x="573" y="122" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="11" fill="#5f5e5a">qc_histograms.png</text>
-  <line x1="340" y1="148" x2="340" y2="172" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Normalization -->
-  <rect x="220" y="172" width="240" height="52" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5"/>
-  <text x="340" y="194" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#0c447c">Normalization</text>
-  <text x="340" y="212" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#185fa5">Scran normalize · log1p transform</text>
-  <line x1="340" y1="224" x2="340" y2="248" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- HVG + PCA -->
-  <rect x="220" y="248" width="240" height="52" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5"/>
-  <text x="340" y="270" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#0c447c">Feature selection</text>
-  <text x="340" y="288" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#185fa5">Highly variable genes · PCA</text>
-  <line x1="340" y1="300" x2="340" y2="324" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Graph + UMAP -->
-  <rect x="220" y="324" width="240" height="52" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5"/>
-  <text x="340" y="346" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#0c447c">Graph + embedding</text>
-  <text x="340" y="364" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#185fa5">KNN graph · UMAP</text>
-  <line x1="460" y1="350" x2="506" y2="350" stroke="#b4b2a9" stroke-width="0.5" stroke-dasharray="3 3"/>
-  <rect x="506" y="336" width="134" height="28" rx="6" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
-  <text x="573" y="350" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="11" fill="#5f5e5a">umap_clusters.png</text>
-  <line x1="340" y1="376" x2="340" y2="400" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Clustering -->
-  <rect x="220" y="400" width="240" height="52" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="0.5"/>
-  <text x="340" y="422" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#0c447c">Leiden clustering</text>
-  <text x="340" y="440" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#185fa5">8 clusters · marker gene scoring</text>
-  <line x1="460" y1="426" x2="506" y2="426" stroke="#b4b2a9" stroke-width="0.5" stroke-dasharray="3 3"/>
-  <rect x="506" y="412" width="134" height="28" rx="6" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
-  <text x="573" y="426" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="11" fill="#5f5e5a">marker_heatmap.png</text>
-  <line x1="340" y1="452" x2="340" y2="476" stroke="#1c3f8f" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Annotation -->
-  <rect x="220" y="476" width="240" height="52" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
-  <text x="340" y="498" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="500" fill="#3c3489">Cell type annotation</text>
-  <text x="340" y="516" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#534ab7">Canonical marker panels · 6 types</text>
-  <line x1="460" y1="502" x2="506" y2="502" stroke="#b4b2a9" stroke-width="0.5" stroke-dasharray="3 3"/>
-  <rect x="506" y="488" width="134" height="28" rx="6" fill="#f1efe8" stroke="#b4b2a9" stroke-width="0.5"/>
-  <text x="573" y="502" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="11" fill="#5f5e5a">umap_cell_types.png</text>
-  <line x1="340" y1="528" x2="340" y2="552" stroke="#534ab7" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Final output -->
-  <rect x="220" y="552" width="240" height="44" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
-  <text x="340" y="574" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="14" font-weight="500" fill="#3c3489">Analysis report + .h5ad</text>
-  <!-- Arrow marker def -->
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </marker>
-  </defs>
-</svg>
+```
+Raw 10x Matrix (PBMC 3k)
+        │
+        ▼
+┌─────────────────────┐
+│   Quality Control   │  → qc_histograms.png
+│  filter cells · mito│
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│   Normalization     │
+│  scran · log1p      │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│  Feature Selection  │
+│  HVGs · PCA         │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│  Graph + Embedding  │  → umap_clusters.png
+│  KNN graph · UMAP   │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│  Leiden Clustering  │  → marker_heatmap.png
+│  8 clusters         │
+└─────────────────────┘
+        │
+        ▼
+┌─────────────────────┐
+│ Cell Type Annotation│  → umap_cell_types.png
+│  6 immune populations│
+└─────────────────────┘
+        │
+        ▼
+ Analysis Report + .h5ad
 ```
 
 ## Dataset
